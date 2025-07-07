@@ -1,0 +1,13 @@
+*.txt
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+*.vs
+*.pdb
+*.idb
+
+
+/ChCppLibrary/StaticLibrary/*
+*.zip
