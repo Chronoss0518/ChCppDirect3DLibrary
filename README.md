@@ -7,13 +7,12 @@ ChCppLibraryのWindows部分を切り出したライブラリになります。
 
 ##### 現在動作確認済み使用言語
 
-- Visual C++14
-- Visual C++17
-- Visual C++20
+内容は「[ChCppBaseLibraryのREADME.mdの「現在動作確認済み使用言語」](https://github.com/Chronoss0518/ChCppWinLibrary/blob/master/README.md)」を参照してください
 
 ##### 現在動作確認済みOS
 
-- Windows11
+内容は「[ChCppBaseLibraryのREADME.mdの「現在動作確認済みOS」](https://github.com/Chronoss0518/ChCppWinLibrary/blob/master/README.md)」を参照してください
+
 
 # 内容
 WindowsAPIを容易に利用することができる機能を追加
@@ -35,8 +34,8 @@ WindowsAPIを容易に利用することができる機能を追加
 
 # このライブラリのコンセプト
 
-内容は「[ChCppBaseLibraryのREADME.md](https://github.com/Chronoss0518/ChCppBaseLibrary/blob/master/README.md)」を参照してください
+内容は「[ChCppBaseLibraryのREADME.mdの「このライブラリのコンセプト」](https://github.com/Chronoss0518/ChCppBaseLibrary/blob/master/README.md)」を参照してください
 
 # 歴史
 
-内容は「[ChCppBaseLibraryのREADME.md](https://github.com/Chronoss0518/ChCppBaseLibrary/blob/master/README.md)」を参照してください
+内容は「[ChCppBaseLibraryのREADME.mdの「歴史」](https://github.com/Chronoss0518/ChCppBaseLibrary/blob/master/README.md)」を参照してください
