@@ -24,8 +24,6 @@ WindowsAPIを容易に利用することができる機能を追加
 3. プロジェクトに紐づいている`StaticLibrary.zip`ファイルを展開する
 4. `StaticLibrary.zip`を展開する
 5. `StaticLibrary`の中にあるStaticLibraryをリンクする
-    - `.linux.a`
-    - `.osx.a`
     - `.lib`
 
 # 予定
