@@ -3,7 +3,7 @@
 
 //#define __SHADER__‚ðhlsl‘¤‚Å’è‹`‚·‚é//
 
-#include"../ShaderPublicInclude.hlsli"
+#include"ShaderPublicInclude.hlsli"
 
 #ifndef MAX_POSITION_DATA
 #define MAX_POSITION_DATA 13

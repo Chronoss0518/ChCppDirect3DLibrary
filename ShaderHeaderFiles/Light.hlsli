@@ -3,7 +3,7 @@
 
 //#define __SHADER__‚ðhlsl‘¤‚Å’è‹`‚·‚é//
 
-#include"../ShaderPublicInclude.hlsli"
+#include"ShaderPublicInclude.hlsli"
 
 #ifndef LIGHT_PLIGHTCOUNT
 #define LIGHT_PLIGHTCOUNT 10

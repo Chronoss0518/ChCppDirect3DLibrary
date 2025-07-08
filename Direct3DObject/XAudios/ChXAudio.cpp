@@ -15,7 +15,7 @@
 #pragma comment(lib,"mfreadwrite.lib")
 #pragma comment(lib,"mfuuid.lib")
 
-#include"../../BaseIncluder/ChBase.h"
+#include"../../../ChCppBaseLibrary/BaseIncluder/ChBase.h"
 
 #include"ChXAudio.h"
 

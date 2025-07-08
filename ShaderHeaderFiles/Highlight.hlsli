@@ -3,7 +3,7 @@
 
 //#define __SHADER__‚ðhlsl‘¤‚Å’è‹`‚·‚é//
 
-#include"../ShaderPublicInclude.hlsli"
+#include"ShaderPublicInclude.hlsli"
 
 #include"Texture/BaseTexture.hlsli"
 

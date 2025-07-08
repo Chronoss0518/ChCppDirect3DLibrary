@@ -3,7 +3,7 @@
 
 //#define __SHADER__‚ðhlsl‘¤‚Å’è‹`‚·‚é//
 
-#include"../ShaderPublicInclude.hlsli"
+#include"ShaderPublicInclude.hlsli"
 
 #ifndef CIRCLE_CULLING_DATA
 #define CIRCLE_CULLING_DATA 6

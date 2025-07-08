@@ -7,7 +7,7 @@
 #pragma comment(lib,"d2d1.lib")
 #pragma comment(lib,"dwrite.lib")
 
-#include"../../BaseIncluder/ChBase.h"
+#include"../../../ChCppBaseLibrary/BaseIncluder/ChBase.h"
 
 #include"../WICBitmapCreator/ChWICBitmapCreator.h"
 #include"ChDirectFont.h"

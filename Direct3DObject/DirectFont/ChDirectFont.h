@@ -12,8 +12,8 @@ enum DWRITE_FONT_WEIGHT;
 enum DWRITE_FONT_STYLE;
 enum DWRITE_FONT_STRETCH;
 
-#include"../../WindowsObject/PackData/ChRect.h"
-#include"../../WindowsObject/PackData/ChPoint.h"
+#include"../../../ChCppWinLibrary/WindowsObject/PackData/ChRect.h"
+#include"../../../ChCppWinLibrary/WindowsObject/PackData/ChPoint.h"
 
 namespace ChD3D
 {

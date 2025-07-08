@@ -1,7 +1,7 @@
 #include<Windows.h>
 #include<Xinput.h>
 
-#include"../../BaseIncluder/ChBase.h"
+#include"../../../ChCppBaseLibrary/BaseIncluder/ChBase.h"
 
 #include"ChXInputController.h"
 

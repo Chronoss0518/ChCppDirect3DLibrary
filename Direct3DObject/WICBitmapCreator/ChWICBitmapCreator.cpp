@@ -2,7 +2,7 @@
 #include<wincodec.h>
 #include<roapi.h>
 
-#include"../../BaseIncluder/ChBase.h"
+#include"../../../ChCppBaseLibrary/BaseIncluder/ChBase.h"
 
 #include"ChWICBitmapCreator.h"
 

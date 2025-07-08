@@ -3,7 +3,7 @@
 
 //#define __SHADER__‚ðhlsl‘¤‚Å’è‹`‚·‚é//
 
-#include"../ShaderPublicInclude.hlsli"
+#include"ShaderPublicInclude.hlsli"
 
 #ifndef SPRITE_DATA_REGISTERNO
 #define SPRITE_DATA_REGISTERNO 0

@@ -8,7 +8,7 @@
 
 #ifdef __SHADER__
 
-#include"../../ShaderPublicInclude.hlsli"
+#include"../ShaderPublicInclude.hlsli"
 
 texture2D baseTex : register(CHANGE_TBUFFER(BASE_TEXTURE_REGISTER));
 
