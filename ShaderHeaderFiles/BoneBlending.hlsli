@@ -19,19 +19,19 @@ cbuffer BoneData :register(CHANGE_CBUFFER(BONE_DATA_REGISTERNO))
 struct ChBoneData
 #endif
 {
-    row_major float4x4 skinWeightMat[BONE_MAX_NUM];
+    row_major float4x4 frameInverseMatrix;
     row_major float4x4 boneOffsetMat[BONE_MAX_NUM];
-    row_major float4x4 boneOffsetInverseMat[BONE_MAX_NUM];
 };
 
 #ifdef __SHADER__
 
 float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 {
-	float4x4 blendMat;
-
-	float4x4 tmpBoneOffsetMat = boneOffsetMat[_blendNum - 1];
-	float4x4 tmpBoneOffsetInverseMat;
+    float4x4 blendMat = float4x4(
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f);
 
 	uint first = 0;
 	uint second = 0;
@@ -41,20 +41,13 @@ float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 		first = i / 4;
 		second = i % 4;
 
-		tmpBoneOffsetMat = mul(boneOffsetMat[i], tmpBoneOffsetMat);
-		tmpBoneOffsetInverseMat = mul(boneOffsetInverseMat[i], tmpBoneOffsetInverseMat);
-
 		if (_blendPow[first][second] <= 0.0f)continue;
-
-		blendMat += mul(skinWeightMat[i],_blendPow[first][second]);
+		
+        blendMat += mul(boneOffsetMat[i], _blendPow[first][second]);
 		
 	}
 
-	//blendMat = mul(tmpBoneOffsetInverseMat, mul(blendMat, tmpBoneOffsetMat));
-	blendMat = mul(tmpBoneOffsetInverseMat, tmpBoneOffsetMat);
-
-
-	return blendMat;
+	return mul(frameInverseMatrix, blendMat);
 
 
 }
