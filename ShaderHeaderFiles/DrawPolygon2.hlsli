@@ -17,29 +17,23 @@
 #define MATERIAL_DATA_REGISTERNO 2
 #endif
 
-#ifndef ChP_MAX_INSTANCE_COUNT
-#define ChP_MAX_INSTANCE_COUNT 100
+#ifndef CHP_MAX_INSTANCE_COUNT
+#define CHP_MAX_INSTANCE_COUNT 100
 #endif
 
 struct ChP_DrawData
 {
 	row_major float4x4 viewMat;
-
     row_major float4x4 proMat;
-    
 	float alphaTestValue;
-	
     float3 drawDataTmp;
 };
 
 struct ChP_CharaData
 {
 	row_major float4x4 worldMat;
-
 	row_major float4x4 frameMatrix;
-	
     float2 moveUV;
-	
     float2 charaDataTmp;
 };
 
@@ -100,11 +94,12 @@ MTWStruct ModelToWorld(
 	float2 _uv,
 	float3 _normal,
 	float3 _faceNormal,
-	float4x4 _frameMatrix)
+	row_major float4x4 _frameMatrix,
+	uint _instanceNo)
 {
 	MTWStruct res;
 
-	float4x4 tmpMat = mul(_frameMatrix, charaDatas.worldMat);
+	float4x4 tmpMat = mul(_frameMatrix, charaDatas[_instanceNo].worldMat);
 
 	res.worldPos = mul(_pos, tmpMat);
 
@@ -112,7 +107,7 @@ MTWStruct ModelToWorld(
 
 	res.proPos = mul(res.viewPos, drawData.proMat);
 
-	res.uv = _uv + charaDatas.moveUV;
+	res.uv = _uv + charaDatas[_instanceNo].moveUV;
 
 	res.vertexNormal = normalize(mul(_normal, (float3x3)tmpMat));
 	res.faceNormal = normalize(mul(_faceNormal, (float3x3)tmpMat));
@@ -135,7 +130,7 @@ void FrustumCulling(float4 _pos)
 
 void AlphaTest(float _alpha)
 {
-	clip(_alpha - charaDatas.alphaTestValue);
+	clip(_alpha - drawData.alphaTestValue);
 }
 
 

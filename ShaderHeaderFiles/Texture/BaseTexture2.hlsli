@@ -6,6 +6,10 @@
 #define	BASE_TEXTURE_REGISTER 0
 #endif
 
+#ifndef BASE_TEXTURE_REGISTERNO
+#define	BASE_TEXTURE_REGISTERNO 3
+#endif
+
 #ifdef __SHADER__
 
 #include"../ShaderPublicInclude.hlsli"
