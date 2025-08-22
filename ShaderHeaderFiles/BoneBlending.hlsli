@@ -19,7 +19,6 @@ cbuffer BoneData :register(CHANGE_CBUFFER(BONE_DATA_REGISTERNO))
 struct ChBoneData
 #endif
 {
-    row_major float4x4 frameInverseMatrix;
     row_major float4x4 boneOffsetMat[BONE_MAX_NUM];
 };
 
@@ -47,7 +46,7 @@ float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 		
 	}
 
-	return mul(frameInverseMatrix, blendMat);
+	return blendMat;
 
 
 }
