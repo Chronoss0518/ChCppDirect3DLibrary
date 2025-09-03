@@ -20,13 +20,14 @@ struct ChBoneData
 #endif
 {
     row_major float4x4 boneOffsetMat[BONE_MAX_NUM];
+    row_major float4x4 boneMat[BONE_MAX_NUM];
 };
 
 #ifdef __SHADER__
 
 float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 {
-    float4x4 blendMat = float4x4(
+    float4x4 res = float4x4(
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
@@ -39,14 +40,11 @@ float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 	{
 		first = i / 4;
 		second = i % 4;
-
-		if (_blendPow[first][second] <= 0.0f)continue;
 		
-        blendMat += mul(boneOffsetMat[i], _blendPow[first][second]);
-		
+        res += mul(boneOffsetMat[i],boneMat[i]) * _blendPow[first][second];
 	}
 
-	return blendMat;
+	return res;
 
 
 }
