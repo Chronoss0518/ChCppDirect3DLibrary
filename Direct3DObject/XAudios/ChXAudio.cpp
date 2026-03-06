@@ -2,13 +2,10 @@
 
 #include<x3daudio.h>
 #include<mfapi.h>
-#include <windows.h>
-#include <mfapi.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
 #include <stdio.h>
 #include <mferror.h>
-#include<mfreadwrite.h>
 
 #pragma comment(lib,"xaudio2.lib")
 #pragma comment(lib,"mfplat.lib")
@@ -40,7 +37,7 @@ const wchar_t* ChD3D::AudioObject::GetFileName()
 
 void AudioObject::SetVolume(const float _Volume)
 {
-	if (!*this)return;
+	if (!IsInit())return;
 	voice->SetVolume(_Volume);
 }
 
@@ -57,21 +54,21 @@ float AudioObject::GetVolume()
 
 void AudioObject::Play()
 {
-	if (!*this)return;
+	if (!IsInit())return;
 
 	voice->Start(0);
 }
 
 void AudioObject::Pause()
 {
-	if (!*this)return;
+	if (!IsInit())return;
 
 	voice->Stop();
 }
 
 void AudioObject::Stop()
 {
-	if (!*this)return;
+	if (!IsInit())return;
 
 	voice->Stop();
 
@@ -85,7 +82,7 @@ void AudioObject::Stop()
 
 void AudioObject::Release()
 {
-	if (!*this)return;
+	if (!IsInit())return;
 
 	manager->RemoveAudios(this);
 
@@ -136,7 +133,7 @@ void X3DAudioObject::Init()
 
 void X3DAudioObject::Release()
 {
-	if (ChPtr::NullCheck(emitter))return;
+	if (!IsInit())return;
 
 	AudioObject::Release();
 
