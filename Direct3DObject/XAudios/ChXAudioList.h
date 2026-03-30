@@ -1,4 +1,6 @@
-#pragma once
+#ifndef Ch_D3DOBJ_XAList_h
+#define Ch_D3DOBJ_XAList_h
+
 
 struct IMFSourceReader;
 struct tWAVEFORMATEX;
@@ -32,6 +34,8 @@ namespace ChD3D
 		{
 			std::vector<unsigned char> audioDataVector;
 		};
+
+	public:
 
 		virtual ~XAudioList();
 
@@ -164,3 +168,5 @@ namespace ChD3D
 	};
 
 }
+
+#endif
