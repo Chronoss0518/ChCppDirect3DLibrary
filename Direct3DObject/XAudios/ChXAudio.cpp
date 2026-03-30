@@ -572,5 +572,3 @@ void ChD3D::XAudioList::Update()
 	UpdateAudios();
 
 }
-
-ChD3D::XAudio2Manager::~XAudio2Manager() { Release(); }
