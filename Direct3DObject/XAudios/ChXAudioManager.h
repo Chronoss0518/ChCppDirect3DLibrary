@@ -1,17 +1,18 @@
-#pragma once
+#ifndef Ch_D3DOBJ_XAManager_h
+#define Ch_D3DOBJ_XAManager_h
 
 #include"ChXAudioList.h"
 
 namespace ChD3D
 {
 
-	class XAudio2Manager :public ChCp::Initializer
+	class XAudio2Manager final :public ChCp::Initializer
 	{
 	private:
 
 		XAudio2Manager() {}
 
-		virtual ~XAudio2Manager();
+		inline ~XAudio2Manager() { Release(); }
 
 	public://Init And Release//
 
@@ -63,3 +64,5 @@ namespace ChD3D
 
 	inline XAudio2Manager& XAudioManager() { return XAudio2Manager::GetIns(); }
 }
+
+#endif
