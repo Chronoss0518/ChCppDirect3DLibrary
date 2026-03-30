@@ -15,6 +15,8 @@
 #include"../../../ChCppBaseLibrary/BaseIncluder/ChBase.h"
 
 #include"ChXAudio.h"
+#include"ChXAudioList.h"
+#include"ChXAudioManager.h"
 
 using namespace ChD3D;
 
@@ -35,13 +37,13 @@ const wchar_t* ChD3D::AudioObject::GetFileName()
 	return fileName.c_str();
 }
 
-void AudioObject::SetVolume(const float _Volume)
+void ChD3D::AudioObject::SetVolume(const float _Volume)
 {
 	if (!IsInit())return;
 	voice->SetVolume(_Volume);
 }
 
-float AudioObject::GetVolume()
+float ChD3D::AudioObject::GetVolume()
 {
 	float outVol = 0.0f;
 
@@ -52,21 +54,21 @@ float AudioObject::GetVolume()
 	return outVol;
 }
 
-void AudioObject::Play()
+void ChD3D::AudioObject::Play()
 {
 	if (!IsInit())return;
 
 	voice->Start(0);
 }
 
-void AudioObject::Pause()
+void ChD3D::AudioObject::Pause()
 {
 	if (!IsInit())return;
 
 	voice->Stop();
 }
 
-void AudioObject::Stop()
+void ChD3D::AudioObject::Stop()
 {
 	if (!IsInit())return;
 
@@ -80,7 +82,7 @@ void AudioObject::Stop()
 	nowPos = 1;
 }
 
-void AudioObject::Release()
+void ChD3D::AudioObject::Release()
 {
 	if (!IsInit())return;
 
@@ -95,7 +97,7 @@ void AudioObject::Release()
 	SetInitFlg(false);
 }
 
-void AudioObject::Update()
+void ChD3D::AudioObject::Update()
 {
 
 	loopEndPos = loopEndPos >= manager->GetAudioDataCount(GetFileName()) ? manager->GetAudioDataCount(GetFileName()) : loopEndPos;
@@ -119,7 +121,7 @@ void AudioObject::Update()
 	manager->SubmitSourceBuffer(voice, GetFileName(), nowPos);
 }
 
-void X3DAudioObject::Init()
+void ChD3D::X3DAudioObject::Init()
 {
 	Release();
 
@@ -131,7 +133,7 @@ void X3DAudioObject::Init()
 	emitter->pCone = nullptr;
 }
 
-void X3DAudioObject::Release()
+void ChD3D::X3DAudioObject::Release()
 {
 	if (!IsInit())return;
 
@@ -141,7 +143,7 @@ void X3DAudioObject::Release()
 	emitter = nullptr;
 }
 
-X3DAUDIO_EMITTER* X3DAudioObject::GetEmitter()
+X3DAUDIO_EMITTER* ChD3D::X3DAudioObject::GetEmitter()
 {
 	if (ChPtr::NullCheck(emitter))return emitter;
 
@@ -161,7 +163,7 @@ X3DAUDIO_EMITTER* X3DAudioObject::GetEmitter()
 	return emitter;
 }
 
-void X3DAudioObject::Update()
+void ChD3D::X3DAudioObject::Update()
 {
 	X3DAUDIO_DSP_SETTINGS dspSettings;
 
@@ -201,24 +203,24 @@ void X3DAudioObject::Update()
 	voice->SetFilterParameters(&FilterParameters);
 }
 
-ChD3D::XAudio2Manager::~XAudio2Manager()
+ChD3D::XAudioList::~XAudioList()
 {
 	Release();
 }
 
-size_t ChD3D::XAudio2Manager::GetAudioDataCount(const wchar_t* _key)
+size_t ChD3D::XAudioList::GetAudioDataCount(const wchar_t* _key)
 {
 	auto&& data = audioDataMap.find(_key);
 	if (data == audioDataMap.end())return 0;
 	return data->second.size();
 }
 
-bool ChD3D::XAudio2Manager::ContainAudioData(const wchar_t* _key)
+bool ChD3D::XAudioList::ContainAudioData(const wchar_t* _key)
 {
 	return  audioDataMap.find(_key) != audioDataMap.end();
 }
 
-ChD3D::XAudio2Manager::MFObject* ChD3D::XAudio2Manager::CreateMFObjectPtr(const wchar_t* _key)
+ChD3D::XAudioList::MFObject* ChD3D::XAudioList::CreateMFObjectPtr(const wchar_t* _key)
 {
 	auto&& mfObject = ChPtr::Make_S<MFObject>();
 
@@ -230,7 +232,7 @@ ChD3D::XAudio2Manager::MFObject* ChD3D::XAudio2Manager::CreateMFObjectPtr(const 
 	return mfObject.get();
 }
 
-bool ChD3D::XAudio2Manager::CreateFileData(const wchar_t* _fileName)
+bool ChD3D::XAudioList::CreateFileData(const wchar_t* _fileName)
 {
 	if (ContainAudioData(_fileName))return true;
 
@@ -254,7 +256,7 @@ bool ChD3D::XAudio2Manager::CreateFileData(const wchar_t* _fileName)
 	return true;
 }
 
-XAUDIO2_BUFFER* ChD3D::XAudio2Manager::SetBuffer(BYTE* _data, unsigned long _maxStreamLen)
+XAUDIO2_BUFFER* ChD3D::XAudioList::SetBuffer(BYTE* _data, unsigned long _maxStreamLen)
 {
 	auto fileData = new ChXAUDIO2_BUFFER();
 
@@ -271,7 +273,7 @@ XAUDIO2_BUFFER* ChD3D::XAudio2Manager::SetBuffer(BYTE* _data, unsigned long _max
 	return fileData;
 }
 
-ChD3D::XAudio2Manager::MFObject* ChD3D::XAudio2Manager::GetMFObject(const wchar_t* _key)
+ChD3D::XAudioList::MFObject* ChD3D::XAudioList::GetMFObject(const wchar_t* _key)
 {
 	auto&& obj = mfObjectMap.find(_key);
 
@@ -279,12 +281,12 @@ ChD3D::XAudio2Manager::MFObject* ChD3D::XAudio2Manager::GetMFObject(const wchar_
 	return obj->second.get();
 }
 
-bool ChD3D::XAudio2Manager::ContainMFObject(const wchar_t* _key)
+bool ChD3D::XAudioList::ContainMFObject(const wchar_t* _key)
 {
 	return mfObjectMap.find(_key) != mfObjectMap.end();
 }
 
-void ChD3D::XAudio2Manager::SubmitSourceBuffer(IXAudio2SourceVoice* _voice, const wchar_t* _filename, size_t _num)
+void ChD3D::XAudioList::SubmitSourceBuffer(IXAudio2SourceVoice* _voice, const wchar_t* _filename, size_t _num)
 {
 	if (ChPtr::NullCheck(_voice))return;
 	if (ChPtr::NullCheck(_filename))return;
@@ -295,19 +297,19 @@ void ChD3D::XAudio2Manager::SubmitSourceBuffer(IXAudio2SourceVoice* _voice, cons
 	_voice->SubmitSourceBuffer(audioData->second[_num]);
 }
 
-void ChD3D::XAudio2Manager::AddAudios(AudioObject* _obj)
+void ChD3D::XAudioList::AddAudios(AudioObject* _obj)
 {
 	audios.push_back(_obj);
 }
 
-void ChD3D::XAudio2Manager::RemoveAudios(AudioObject* _obj)
+void ChD3D::XAudioList::RemoveAudios(AudioObject* _obj)
 {
 	auto&& thiss = std::find(audios.begin(), audios.end(), _obj);
 
 	audios.erase(thiss);
 }
 
-void ChD3D::XAudio2Manager::UpdateAudios()
+void ChD3D::XAudioList::UpdateAudios()
 {
 	for (auto&& audio = audios.begin(); audio != audios.end(); audio)
 	{
@@ -322,17 +324,17 @@ void ChD3D::XAudio2Manager::UpdateAudios()
 	}
 }
 
-float* ChD3D::XAudio2Manager::GetMatrix()
+float* ChD3D::XAudioList::GetMatrix()
 {
 	return &matrix[0];
 }
 
-void ChD3D::XAudio2Manager::ResizeMatrix(size_t _num)
+void ChD3D::XAudioList::ResizeMatrix(size_t _num)
 {
 	matrix.resize(_num);
 }
 
-void ChD3D::XAudio2Manager::CRTRelease()
+void ChD3D::XAudioList::CRTRelease()
 {
 	for (auto&& aObject : audios)
 	{
@@ -360,7 +362,7 @@ void ChD3D::XAudio2Manager::CRTRelease()
 
 }
 
-void XAudio2Manager::Init()
+void ChD3D::XAudioList::Init()
 {
 	if (*this)return;
 
@@ -404,7 +406,7 @@ void XAudio2Manager::Init()
 
 }
 
-bool XAudio2Manager::MFObjectInit(const wchar_t* _key,MFObject& _target)
+bool ChD3D::XAudioList::MFObjectInit(const wchar_t* _key, MFObject& _target)
 {
 	return MFCreateSourceReaderFromURL(
 		_key,
@@ -412,7 +414,7 @@ bool XAudio2Manager::MFObjectInit(const wchar_t* _key,MFObject& _target)
 		&_target.reader) == S_OK;
 }
 
-void XAudio2Manager::Release()
+void ChD3D::XAudioList::Release()
 {
 
 	if (!*this)return;
@@ -434,14 +436,14 @@ void XAudio2Manager::Release()
 	SetInitFlg(false);
 }
 
-void XAudio2Manager::MFObjectRelease(MFObject& _target)
+void ChD3D::XAudioList::MFObjectRelease(MFObject& _target)
 {
 	CoTaskMemFree(_target.waveFormat);
 
 	_target.reader->Release();
 }
 
-void XAudio2Manager::LoadStart()
+void ChD3D::XAudioList::LoadStart()
 {
 	if (loadFlg)return;
 
@@ -452,7 +454,7 @@ void XAudio2Manager::LoadStart()
 	loadFlg = true;
 }
 
-void XAudio2Manager::LoadEnd()
+void ChD3D::XAudioList::LoadEnd()
 {
 	if (!loadFlg)return;
 
@@ -461,7 +463,7 @@ void XAudio2Manager::LoadEnd()
 	loadFlg = false;
 }
 
-void XAudio2Manager::LoadSoundBase(AudioObject& _object, const wchar_t* _fileName)
+void ChD3D::XAudioList::LoadSoundBase(AudioObject& _object, const wchar_t* _fileName)
 {
 	if (ChPtr::NullCheck(&_object))return;
 
@@ -486,7 +488,7 @@ void XAudio2Manager::LoadSoundBase(AudioObject& _object, const wchar_t* _fileNam
 	AddAudios(&_object);
 }
 
-bool XAudio2Manager::CreateMFObject(const wchar_t* _fileName)
+bool ChD3D::XAudioList::CreateMFObject(const wchar_t* _fileName)
 {
 	if (ContainMFObject(_fileName))return true;
 
@@ -515,7 +517,7 @@ bool XAudio2Manager::CreateMFObject(const wchar_t* _fileName)
 	return true;
 }
 
-XAUDIO2_BUFFER* ChD3D::XAudio2Manager::LoadBuffers(MFObject* _MFObj)
+XAUDIO2_BUFFER* ChD3D::XAudioList::LoadBuffers(MFObject* _MFObj)
 {
 	DWORD streamFlg = 0;
 	LONGLONG streamLen = 0;
@@ -540,7 +542,7 @@ XAUDIO2_BUFFER* ChD3D::XAudio2Manager::LoadBuffers(MFObject* _MFObj)
 
 	mediaBuffer->Lock(&data, &maxStreamLen, &currentLen);
 
-	auto&& fileData = SetBuffer(data,maxStreamLen);
+	auto&& fileData = SetBuffer(data, maxStreamLen);
 
 	mediaBuffer->Unlock();
 
@@ -551,9 +553,9 @@ XAUDIO2_BUFFER* ChD3D::XAudio2Manager::LoadBuffers(MFObject* _MFObj)
 	return fileData;
 }
 
-void XAudio2Manager::Update()
+void ChD3D::XAudioList::Update()
 {
-	
+
 	auto zDirection = mat.GetZAxisDirection();
 	auto yDirection = mat.GetYAxisDirection();
 
@@ -566,7 +568,9 @@ void XAudio2Manager::Update()
 	listener->OrientTop = yDirection;
 	listener->Position = pos;
 	listener->Velocity = pos - beforePos;
-	
+
 	UpdateAudios();
-	
+
 }
+
+ChD3D::XAudio2Manager::~XAudio2Manager() { Release(); }
