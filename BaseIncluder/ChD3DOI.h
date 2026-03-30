@@ -10,6 +10,8 @@
 
 #include"../Direct3DObject/XInputController/ChXInputController.h"
 #include"../Direct3DObject/XAudios/ChXAudio.h"
+#include"../Direct3DObject/XAudios/ChXAudioList.h"
+#include"../Direct3DObject/XAudios/ChXAudioManager.h"
 #include"../Direct3DObject/WICBitmapCreator/ChWICBitmapCreator.h"
 #include"../Direct3DObject/DirectFont/ChDirectFont.h"
 
