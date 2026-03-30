@@ -555,7 +555,6 @@ XAUDIO2_BUFFER* ChD3D::XAudioList::LoadBuffers(MFObject* _MFObj)
 
 void ChD3D::XAudioList::Update()
 {
-
 	auto zDirection = mat.GetZAxisDirection();
 	auto yDirection = mat.GetYAxisDirection();
 
