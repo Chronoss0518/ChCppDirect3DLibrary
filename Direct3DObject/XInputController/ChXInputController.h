@@ -45,6 +45,11 @@ namespace ChD3D
 			return state.dwPacketNumber;
 		}
 
+		inline bool GetFlgs(unsigned short _xinputGamepadDpadMask)
+		{
+			return (state.Gamepad.wButtons & _xinputGamepadDpadMask) > 0;
+		}
+
 		inline bool GetUpFlg() 
 		{
 			return (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) > 0;
@@ -166,6 +171,5 @@ namespace ChD3D
 	};
 
 }
-
 
 #endif
