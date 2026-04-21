@@ -15,7 +15,7 @@ struct ChOutLineData
 {
     float width = 1.0f;
     float3 tmp;
-    float4 outlineColor;
+    float4 outlineColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
 
