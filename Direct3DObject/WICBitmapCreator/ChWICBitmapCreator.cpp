@@ -22,17 +22,16 @@ using namespace ChD3D;
 
 void ChD3D::WICBitmapObject::Release()
 {
+	if (ChPtr::NullCheck(bitmap))return;
+
 	auto&& list = WICBitmapCreatorObj().bitmapList;
 
 	auto&& bitmapIterator = std::find(list.begin(), list.end(), bitmap);
 
 	list.erase(bitmapIterator);
 
-	if (ChPtr::NotNullCheck(bitmap))
-	{
-		bitmap->Release();
-		bitmap = nullptr;
-	}
+	bitmap->Release();
+	bitmap = nullptr;
 }
 
 ChD3D::WICBitmapCreator::~WICBitmapCreator()
