@@ -77,6 +77,7 @@ texture2D normalTex :register(CHANGE_TBUFFER(NORMAL_TEXTURE_REGISTER));
 //画像から1ピクセルの色を取得するための物//
 sampler normalSmp :register(CHANGE_SBUFFER(NORMAL_TEXTURE_REGISTER));
 
+//ModelToWorld Structure//
 struct MTWStruct
 {
 	float3 vertexNormal;
