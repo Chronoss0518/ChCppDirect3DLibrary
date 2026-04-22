@@ -13,7 +13,7 @@ cbuffer OutLineData :register(CHANGE_CBUFFER(OUTLINE_DATA_REGISTERNO))
 struct ChOutLineData
 #endif
 {
-    float width = 1.0f;
+    float width = 0.1f;
     float3 tmp;
     float4 outlineColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 };
