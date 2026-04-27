@@ -57,11 +57,11 @@ struct ChLightData
 texture2D lightPowMap :register(CHANGE_TBUFFER(LIGHT_TEXTURE_REGISTERNO));
 
 //画像から1ピクセルの色を取得するための物//
-sampler lightSmp :register(CHANGE_SBUFFER(LIGHT_TEXTURE_REGISTERNO))
-= sampler_state {
+sampler lightSmp = sampler_state {
 	Filter = MIN_MAG_MIP_LINEAR;
 	AddressU = Clamp;
 	AddressV = Clamp;
+	AddressW = Clamp;
 };
 
 struct L_BaseColor
@@ -72,15 +72,13 @@ struct L_BaseColor
 	float4 specular;
 };
 
-float3 LamLightColBase(float3 _dif, float _pow);
+float LamLightColPowerBase(float3 _normal,float3 _lightDir);
 
-float3 LamLightDirection(float3 _normal);
+float3 LamLightDirection(float3 _modelPos, float3 _normal, float4 _speculer,float3 _baseCol);
 
 float3 LamLightPoint(float3 _dif, float _pow);
 
-float3 SpeLightColBase(float _lcDot, float4 _speculer);
-
-float3 SpeLightDirection(float3 _modelPos, float3 _normal, float4 _speculer);
+float3 SpeLightColBase(float3 _modelPos, float3 _normal, float4 _speculer,float3 _lightDir);
 
 float3 AmbLightCol();
 
@@ -90,26 +88,20 @@ float3 GetDirectionalLightColor(L_BaseColor _bCol)
 
 	if (!light.useFlg)return oCol;
 
-	oCol += LamLightDirection(_bCol.wfNormal);
-
-	oCol += SpeLightDirection(_bCol.wPos, _bCol.wfNormal, _bCol.specular);
+	oCol = LamLightDirection(_bCol.wPos, _bCol.wfNormal, _bCol.specular,oCol);
 
 	return oCol;
 }
 
-float3 LamLightDirection(float3 _normal)
+float3 LamLightDirection(float3 _modelPos, float3 _normal, float4 _speculer,float3 _baseCol)
 {
-	float dotSize = dot(normalize(_normal), normalize(-light.dir));
+	float lamPow = LamLightColPowerBase(_normal, light.dir);
 
-	float4 lamPowMapCol = lightPowMap.Sample(lightSmp, float2(dotSize, dotSize));
+	if(lamPow < light.ambPow)return light.dif * light.ambPow * _baseCol;
 
-	float lamPow = lamPowMapCol[colorType];
+	float3 resultCol =  light.dif * lamPow * _baseCol;
 
-	if(dotSize > light.ambPow)return light.dif *  light.ambPow;
-
-	//dotSize = dotSize > light.ambPow ? dotSize : light.ambPow;
-
-	float3 resultCol =  LamLightColBase(light.dif, lamPow);
+	resultCol += SpeLightColBase(_modelPos,_normal,_speculer,light.dir);
 
 	return resultCol;
 }
@@ -119,32 +111,22 @@ float3 LamLightPoint(float3 _dif, float _pow)
 	
 }
 
-float3 SpeLightDirection( float3 _modelPos, float3 _normal, float4 _speculer)
+float LamLightColPowerBase(float3 _normal,float3 _lightDir)
 {
+	float dotSize = dot(normalize(_normal), normalize(-_lightDir));
+	
+	return lightPowMap.Sample(lightSmp, float2(dotSize, dotSize))[colorType];
+}
 
-	float3 tmpVec = normalize(camPos.xyz - _modelPos) + normalize(-light.dir);
+float3 SpeLightColBase(float3 _modelPos, float3 _normal, float4 _speculer,float3 _lightDir)
+{
+	float3 tmpVec = normalize(camPos.xyz - _modelPos) + normalize(-_lightDir);
 
 	tmpVec = normalize(tmpVec);
 
 	float lcDot = dot(tmpVec, _normal);
 
-	return SpeLightColBase(lcDot, _speculer);
-}
-
-float3 LamLightColBase(float3 _dif, float _pow)
-{
-
-	float3 tmpLightCol = _dif;
-
-	tmpLightCol *= _pow;
-
-	return tmpLightCol;
-}
-
-float3 SpeLightColBase(float _lcDot, float4 _speculer)
-{
-
-	float power = saturate(_lcDot);
+	float power = saturate(lcDot);
 
 	float3 tmpLightCol = _speculer.rgb * pow(power, _speculer.a);
 
