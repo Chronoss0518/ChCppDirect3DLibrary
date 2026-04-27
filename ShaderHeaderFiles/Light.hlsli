@@ -97,9 +97,7 @@ float3 LamLightDirection(float3 _modelPos, float3 _normal, float4 _speculer,floa
 {
 	float lamPow = LamLightColPowerBase(_normal, light.dir);
 
-	if(lamPow < light.ambPow)return light.dif * light.ambPow * _baseCol;
-
-	float3 resultCol =  light.dif * lamPow * _baseCol;
+	float3 resultCol =  saturate(light.dif * lamPow + light.dif * light.ambPow) * _baseCol;
 
 	resultCol += SpeLightColBase(_modelPos,_normal,_speculer,light.dir);
 
