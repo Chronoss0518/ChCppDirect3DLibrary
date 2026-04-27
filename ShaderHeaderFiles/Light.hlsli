@@ -82,7 +82,7 @@ float3 SpeLightColBase(float3 _modelPos, float3 _normal, float4 _speculer,float3
 
 float3 AmbLightCol();
 
-float3 GetDirectionalLightColor(L_BaseColor _bCol)
+float3 GetLightColor(L_BaseColor _bCol)
 {
 	float3 oCol = _bCol.color;
 
