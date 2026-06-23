@@ -27,11 +27,7 @@ struct ChBoneData
 
 float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 {
-    float4x4 res = float4x4(
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f);
+    float4x4 res = GetInitMatrix4x4();
 
 	uint first = 0;
 	uint second = 0;
