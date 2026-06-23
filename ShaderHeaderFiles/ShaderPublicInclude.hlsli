@@ -23,6 +23,23 @@
 #define CHANGE_SBUFFER(_no) CHANGE_BUFFER(s,_no)
 #endif
 
+float4x4 GetInitMatrix4x4()
+{
+	return float4x4(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+float3x3 GetInitMatrix3x3()
+{
+	return float3x3(
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 
+		0.0f, 0.0f, 1.0f);
+}
+
 #else
 
 #ifndef SHADER_TO_CPP

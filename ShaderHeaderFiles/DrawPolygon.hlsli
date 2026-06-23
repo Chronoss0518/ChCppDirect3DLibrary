@@ -88,23 +88,6 @@ struct MTWStruct
 	float2 uv;
 };
 
-float4x4 GetInitMatrix4x4()
-{
-	return float4x4(
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
-}
-
-float3x3 GetInitMatrix3x3()
-{
-	return float3x3(
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 
-		0.0f, 0.0f, 1.0f);
-}
-
 MTWStruct ModelToWorld(
 	float4 _pos,
 	float2 _uv,
