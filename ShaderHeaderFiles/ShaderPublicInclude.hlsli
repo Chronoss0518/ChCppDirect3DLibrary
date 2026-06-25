@@ -3,16 +3,32 @@
 
 #ifdef __SHADER__
 
-#ifndef CHANGE_BUFFER
+#ifdef _SM6_0_
+#ifndef _SM5_0_
+#define _SM5_0_
+#endif
+#endif
+
 #ifdef _SM5_0_
-#define CHANGE_BUFFER(_buffer,_no) _buffer##_no
-#else
+#ifndef _SM3_0_
+#define _SM3_0_
+#endif
+#endif
+
+#ifndef CHANGE_BUFFER
+#ifdef _SM6_0_
 #define CHANGE_BUFFER(_buffer,_no) _buffer[_no]
+#else
+#define CHANGE_BUFFER(_buffer,_no) _buffer##_no
 #endif
 #endif
 
 #ifndef CHANGE_CBUFFER
+#ifdef _SM3_0_
+#define CHANGE_CBUFFER(_no) CHANGE_BUFFER(c,_no)
+#else
 #define CHANGE_CBUFFER(_no) CHANGE_BUFFER(b,_no)
+#endif
 #endif
 
 #ifndef CHANGE_TBUFFER
