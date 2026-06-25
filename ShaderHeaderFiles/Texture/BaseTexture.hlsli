@@ -10,6 +10,8 @@
 
 #include"../ShaderPublicInclude.hlsli"
 
+#ifdef _SM5_0_
+
 Texture2DArray baseTex : register(CHANGE_TBUFFER(BASE_TEXTURE_REGISTER));
 
 SamplerState baseSmp : register(CHANGE_SBUFFER(BASE_TEXTURE_REGISTER));
@@ -42,6 +44,34 @@ float4 GetBaseTextureColorFromSampler(float2 _uv, sampler _sampler)
     return res;
 }
 
+#else
+
+texutre baseTex : register(CHANGE_TBUFFER(BASE_TEXTURE_REGISTER));
+
+sampler baseSmp : register(CHANGE_SBUFFER(BASE_TEXTURE_REGISTER))
+=sampler_state
+{
+    Texture = <baseTex>;
+    MipFilter = WRAP;
+    MinFilter = WRAP;
+    MagFilter = WRAP;
+};
+
+float4 GetBaseTextureColor(float2 _uv)
+{
+    float4 res = tex2D(baseSmp, In.TextureUV);
+    res.a = min(res.a,1.0f);
+    return res;
+}
+
+float4 GetBaseTextureColorFromSampler(float2 _uv, sampler _sampler)
+{
+    float4 res = tex2D(_sampler, In.TextureUV);
+    res.a = min(res.a,1.0f);
+    return res;
+}
+
+#endif
 #endif
 
 #endif
