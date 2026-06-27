@@ -24,7 +24,7 @@
 #endif
 
 #ifndef CHANGE_CBUFFER
-#ifdef _SM3_0_
+#ifndef _SM5_0_
 #define CHANGE_CBUFFER(_no) CHANGE_BUFFER(c,_no)
 #else
 #define CHANGE_CBUFFER(_no) CHANGE_BUFFER(b,_no)
