@@ -14,7 +14,11 @@
 #endif
 
 #ifdef __SHADER__
+#ifdef _SM5_0_
 cbuffer BoneData :register(CHANGE_CBUFFER(BONE_DATA_REGISTERNO))
+#else
+struct BoneData
+#endif
 #else
 struct ChBoneData
 #endif
@@ -24,6 +28,28 @@ struct ChBoneData
 };
 
 #ifdef __SHADER__
+
+#ifndef _SM5_0_
+
+float4x4 BlendMatrix(BoneData _data,float4x4 _blendPow, uint _blendNum)
+{
+    float4x4 res = GetInitMatrix4x4();
+
+	uint first = 0;
+	uint second = 0;
+
+	for (uint i = 0; i < _blendNum && i < BONE_MAX_NUM; i++)
+	{
+		first = i / 4;
+		second = i % 4;
+		
+        res += mul(_data.boneOffsetMat[i],_data.boneMat[i]) * _blendPow[first][second];
+	}
+
+	return res;
+}
+
+#else
 
 float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 {
@@ -41,9 +67,10 @@ float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 	}
 
 	return res;
-
-
 }
+
+#endif
+
 #endif
 
 #endif
