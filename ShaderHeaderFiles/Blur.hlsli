@@ -12,7 +12,11 @@
 #endif
 
 #ifdef __SHADER__
+#ifdef _SM5_0_
 cbuffer BlurData : register(CHANGE_CBUFFER(BLUR_DATA_REGISTERNO))
+#else
+struct BlurData
+#endif
 #else
 struct ChS_Blur
 #endif
@@ -45,6 +49,32 @@ float4 Blur(float2 _uv)
     
     return resultColor;
 }
+
+#ifndef _SM5_0_
+
+float4 Blur(BlurData _data,float2 _uv)
+{
+    float4 resultColor = GetBaseTextureColor(_uv);
+    float baseWidth = _data.windowSize.x > 0.0f ? 1.0f / _data.windowSize.x : 1.0f;
+    float baseHeight = _data.windowSize.y > 0.0f ? 1.0f / _data.windowSize.y : 1.0f;
+    
+    bool liteFlg = _data.liteBlurFlg == 1;
+    int mulCount = _data.liteFlg ? 2 : 4;
+
+    for (int i = 1; i < _data.blurPower;i++)
+    {
+        resultColor += GetBaseTextureColor(float2(_uv.x + (baseWidth * i), _uv.y));
+        resultColor += GetBaseTextureColor(float2(_uv.x, _uv.y + (baseHeight * i)));
+        if(liteFlg)continue;
+        resultColor += GetBaseTextureColor(float2(_uv.x + (baseWidth * -i), _uv.y));
+        resultColor += GetBaseTextureColor(float2(_uv.x, _uv.y + (baseHeight * -i)));
+    }
+    resultColor /= float((_data.blurPower * mulCount) + 1);
+    
+    return resultColor;
+}
+
+#endif
 
 #endif
 
