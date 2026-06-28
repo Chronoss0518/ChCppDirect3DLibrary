@@ -52,9 +52,9 @@ void CircleCullingTest(CircleCullingData _data,float2 _uv)
 
 	uvPosRadian = uvNormalDir.y > 0 ? (uvPosRadian - 1.0f) * -0.25f : (uvPosRadian + 1.0f) * 0.25f + 0.5f;
 
-	float useDrawValue = _data.drawValue * _data.maxValue;
+	float useDrawValue = _data.drawValue * maxValue;
 	
-	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (_data.maxValue + useDrawValue));
+	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (maxValue + useDrawValue));
 }
 #else
 
@@ -82,6 +82,7 @@ void CircleCullingTest(float2 _uv)
 	
 	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (maxValue + useDrawValue));
 }
+
 #endif
 
 #endif
