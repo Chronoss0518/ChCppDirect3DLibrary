@@ -30,14 +30,6 @@ struct ChBlurData
     ;
 };
 
-#ifdef __SHADER__
-#ifdef _SM5_0_
-cbuffer BlurData : register(CHANGE_CBUFFER(BLUR_DATA_REGISTERNO))
-{
-    ChBlurData blurData;
-};
-#endif
-#endif
 
 #ifdef __SHADER__
 
@@ -51,6 +43,11 @@ float4 Blur(ChBlurData _data,float2 _uv)
 }
 
 #else
+
+cbuffer BlurData : register(CHANGE_CBUFFER(BLUR_DATA_REGISTERNO))
+{
+    ChBlurData blurData;
+};
 
 float4 Blur(float2 _uv)
 {
