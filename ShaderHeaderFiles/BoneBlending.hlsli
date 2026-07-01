@@ -20,15 +20,6 @@ struct ChBoneData
 };
 
 #ifdef __SHADER__
-#ifdef _SM5_0_
-cbuffer BoneData :register(CHANGE_CBUFFER(BONE_DATA_REGISTERNO))
-{
-	ChBoneData boneData;
-};
-#endif
-#endif
-
-#ifdef __SHADER__
 
 float4x4 BlendMatrixBase(ChBoneData _data,float4x4 _blendPow, uint _blendNum);
 
@@ -40,6 +31,11 @@ float4x4 BlendMatrix(ChBoneData _data,float4x4 _blendPow, uint _blendNum)
 }
 
 #else
+
+cbuffer BoneData :register(CHANGE_CBUFFER(BONE_DATA_REGISTERNO))
+{
+	ChBoneData boneData;
+};
 
 float4x4 BlendMatrix(float4x4 _blendPow, uint _blendNum)
 {
