@@ -59,14 +59,14 @@ sampler baseSmp : register(CHANGE_SBUFFER(BASE_TEXTURE_REGISTER))
 
 float4 GetBaseTextureColor(float2 _uv)
 {
-    float4 res = tex2D(baseSmp, In.TextureUV);
+    float4 res = tex2D(baseSmp, _uv);
     res.a = min(res.a,1.0f);
     return res;
 }
 
 float4 GetBaseTextureColorFromSampler(float2 _uv, sampler _sampler)
 {
-    float4 res = tex2D(_sampler, In.TextureUV);
+    float4 res = tex2D(_sampler, _uv);
     res.a = min(res.a,1.0f);
     return res;
 }
