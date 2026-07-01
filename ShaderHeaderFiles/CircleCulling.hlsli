@@ -30,15 +30,6 @@ struct ChCircleCullingData
 };
 
 #ifdef __SHADER__
-#ifdef _SM5_0_
-cbuffer CircleCullingData :register(CHANGE_CBUFFER(CIRCLE_CULLING_DATA))
-{
-	ChCircleCullingData circleCullingData;
-};
-#endif
-#endif
-
-#ifdef __SHADER__
 
 void CircleCullingTestBase(ChCircleCullingData _data,float2 _uv);
 
@@ -52,6 +43,11 @@ void CircleCullingTest(ChCircleCullingData _data,float2 _uv)
 
 #else
 
+cbuffer CircleCullingData :register(CHANGE_CBUFFER(CIRCLE_CULLING_DATA))
+{
+	ChCircleCullingData circleCullingData;
+};
+
 //このメソッドの内部でclipを行っており、成功するとdiscardされずに描画される//
 void CircleCullingTest(float2 _uv)
 {
@@ -63,7 +59,7 @@ void CircleCullingTest(float2 _uv)
 //このメソッドの内部でclipを行っており、成功するとdiscardされずに描画される//
 void CircleCullingTestBase(ChCircleCullingData _data,float2 _uv)
 {
-	float maxValue = 1.0f;
+	const float MAX_VALUE = 1.0f;
 	
 	float3 useDrawStartDir = float3(_data.drawStartDir.x, 0.0f, _data.drawStartDir.y);
 	useDrawStartDir = normalize(useDrawStartDir);
@@ -82,9 +78,9 @@ void CircleCullingTestBase(ChCircleCullingData _data,float2 _uv)
 
 	uvPosRadian = uvNormalDir.y > 0 ? (uvPosRadian - 1.0f) * -0.25f : (uvPosRadian + 1.0f) * 0.25f + 0.5f;
 
-	float useDrawValue = _data.drawValue * maxValue;
+	float useDrawValue = _data.drawValue * MAX_VALUE;
 	
-	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (maxValue + useDrawValue));
+	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (MAX_VALUE + useDrawValue));
 }
 
 #endif
