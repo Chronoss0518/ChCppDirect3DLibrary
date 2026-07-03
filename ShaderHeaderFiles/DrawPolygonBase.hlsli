@@ -1,26 +1,38 @@
 #ifndef ChShader_PublicHeader_DPBase
 #define ChShader_PublicHeader_DPBase
 
+#ifndef CH_DP_DRAW_DATA_REGISTERNO
+#define CH_DP_DRAW_DATA_REGISTERNO 0
+#endif
+
+#ifndef CH_DP_MODEL_DATA_REGISTERNO
+#define CH_DP_MODEL_DATA_REGISTERNO 1
+#endif
+
+#ifndef CH_DP_FRAME_DATA_REGISTERNO 
+#define CH_DP_FRAME_DATA_REGISTERNO 2
+#endif
+
+#ifndef CH_DP_MATERIAL_DATA_REGISTERNO 
+#define CH_DP_MATERIAL_DATA_REGISTERNO 3
+#endif
+
 struct ChDrawData
 {
     row_major float4x4 viewMat;
-
     row_major float4x4 proMat;
-	
     float alphaTestValue;
-	
     float3 nonData;
 };
 
-struct ChCharaData
+struct ChModelData
 {
     row_major float4x4 worldMat;
+};
 
+struct ChFrameData
+{
     row_major float4x4 frameMatrix;
-	
-    float2 moveUV;
-	
-    float2 nonData;
 };
 
 struct ChMaterial
@@ -32,6 +44,9 @@ struct ChMaterial
     float spePow;
 	//ambient//
     float4 ambient;
+	
+    float2 moveUV;
+    float2 nonData;
 };
 
 #ifdef __SHADER__
@@ -62,7 +77,8 @@ void FrustumCulling(float4 _pos)
 
 MTWStruct ModelToWorldBase(
 	ChDrawData _drawData,
-	ChCharaData _charaData,
+	ChModelData _modelData,
+	ChFrameData _frameData,
 	float4 _pos,
 	float2 _uv,
 	float3 _normal,
@@ -71,7 +87,7 @@ MTWStruct ModelToWorldBase(
 {
 	MTWStruct res;
 
-	float4x4 tmpMat = mul(_frameMatrix, _charaData.worldMat);
+	float4x4 tmpMat = mul(_frameMatrix, _modelData.worldMat);
 
 	res.worldPos = mul(_pos, tmpMat);
 
@@ -79,7 +95,7 @@ MTWStruct ModelToWorldBase(
 
 	res.proPos = mul(res.viewPos, _drawData.proMat);
 
-	res.uv = _uv + _charaData.moveUV;
+	res.uv = _uv + _frameData.moveUV;
 
 	res.vertexNormal = normalize(mul(_normal, (float3x3)tmpMat));
 	res.faceNormal = normalize(mul(_faceNormal, (float3x3)tmpMat));
