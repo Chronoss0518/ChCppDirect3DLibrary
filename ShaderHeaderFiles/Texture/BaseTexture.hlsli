@@ -2,8 +2,8 @@
 #ifndef ChShader_PublicHeader_Base_Texture
 #define ChShader_PublicHeader_Base_Texture
 
-#ifndef BASE_TEXTURE_REGISTER
-#define BASE_TEXTURE_REGISTER 0
+#ifndef CH_BT_BASE_TEXTURE_REGISTER
+#define CH_BT_BASE_TEXTURE_REGISTER 0
 #endif
 
 #ifdef __SHADER__
@@ -12,9 +12,9 @@
 
 #ifdef _SM5_0_
 
-Texture2DArray baseTex : register(CHANGE_TBUFFER(BASE_TEXTURE_REGISTER));
+Texture2DArray baseTex : register(CH_CHANGE_TBUFFER(CH_BT_BASE_TEXTURE_REGISTER));
 
-SamplerState baseSmp : register(CHANGE_SBUFFER(BASE_TEXTURE_REGISTER));
+SamplerState baseSmp : register(CH_CHANGE_SBUFFER(CH_BT_BASE_TEXTURE_REGISTER));
 
 float4 GetBaseTextureColorFromNo(float2 _uv,uint _no)
 {
@@ -46,9 +46,9 @@ float4 GetBaseTextureColorFromSampler(float2 _uv, sampler _sampler)
 
 #else
 
-texutre baseTex : register(CHANGE_TBUFFER(BASE_TEXTURE_REGISTER));
+texutre baseTex : register(CH_CHANGE_TBUFFER(CH_BT_BASE_TEXTURE_REGISTER));
 
-sampler baseSmp : register(CHANGE_SBUFFER(BASE_TEXTURE_REGISTER))
+sampler baseSmp : register(CH_CHANGE_SBUFFER(CH_BT_BASE_TEXTURE_REGISTER))
 =sampler_state
 {
     Texture = <baseTex>;

@@ -5,17 +5,17 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef MAX_POSITION_DATA
-#define MAX_POSITION_DATA 13
+#ifndef CH_BS_MAX_POSITION_DATA
+#define CH_BS_MAX_POSITION_DATA 13
 #endif
 
-#ifndef MAX_CIRCLE_DATA
-#define MAX_CIRCLE_DATA 13
+#ifndef CH_BS_MAX_CIRCLE_DATA
+#define CH_BS_MAX_CIRCLE_DATA 13
 #endif
 
 struct ChBasicShapesPositions
 {
-	float4 positions[MAX_POSITION_DATA];
+    float4 positions[CH_BS_MAX_POSITION_DATA];
 	uint usePositionCount;
 	float3 tmp;//パッキング用//
 };
@@ -29,7 +29,7 @@ struct ChBasicShapesCircleData
 
 struct ChBasicShapesCircleDatas
 {
-	ChBasicShapesCircleData datas[MAX_CIRCLE_DATA];
+    ChBasicShapesCircleData datas[CH_BS_MAX_CIRCLE_DATA];
 	int usePositionCount;
 	float3 tmp;//パッキング用//
 };
@@ -47,7 +47,7 @@ int IsInPosition(ChBasicShapesPositions _positions, float2 _uv)
 	float3 basePos = 0.0f;
 	float3 nextPos = 0.0f;
 	uint tmpValue = 0;
-	for (i = 0; i < _positions.usePositionCount && i < MAX_POSITION_DATA; i++)
+	for (i = 0; i < _positions.usePositionCount && i < CH_BS_MAX_POSITION_DATA; i++)
 	{
 		tmpValue = (i + 1) % _positions.usePositionCount;
 		basePos = float3(_positions.positions[i].x, 0.0f, _positions.positions[i].y);
@@ -70,7 +70,7 @@ int IsInCirclePosition(ChBasicShapesCircleDatas _circleDatas, float2 _uv)
 	float tmpSize = 0.0f;
 	int i = 0;
 
-	for (i = 0; i < _circleDatas.usePositionCount && i < MAX_CIRCLE_DATA; i++)
+	for (i = 0; i < _circleDatas.usePositionCount && i < CH_BS_MAX_CIRCLE_DATA; i++)
 	{
 		tmpVec = _uv - _circleDatas.datas[i].centerPosition;
 		tmpSize = _circleDatas.datas[i].size * _circleDatas.datas[i].size;

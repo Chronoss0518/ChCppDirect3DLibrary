@@ -5,18 +5,18 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef BONE_DATA_REGISTERNO
-#define BONE_DATA_REGISTERNO 11
+#ifndef CH_BB_BONE_DATA_REGISTERNO
+#define CH_BB_BONE_DATA_REGISTERNO 11
 #endif
 
-#ifndef BONE_MAX_NUM
-#define BONE_MAX_NUM 16
+#ifndef CH_BB_BONE_MAX_NUM
+#define CH_BB_BONE_MAX_NUM 16
 #endif
 
 struct ChBoneData
 {
-    row_major float4x4 boneOffsetMat[BONE_MAX_NUM];
-    row_major float4x4 boneMat[BONE_MAX_NUM];
+    row_major float4x4 boneOffsetMat[CH_BB_BONE_MAX_NUM];
+    row_major float4x4 boneMat[CH_BB_BONE_MAX_NUM];
 };
 
 #ifdef __SHADER__
@@ -32,7 +32,7 @@ float4x4 BlendMatrix(ChBoneData _data,float4x4 _blendPow, uint _blendNum)
 
 #else
 
-cbuffer BoneData :register(CHANGE_CBUFFER(BONE_DATA_REGISTERNO))
+cbuffer BoneData :register(CH_CHANGE_CBUFFER(CH_BB_BONE_DATA_REGISTERNO))
 {
 	ChBoneData boneData;
 };
@@ -51,7 +51,7 @@ float4x4 BlendMatrixBase(ChBoneData _data,float4x4 _blendPow, uint _blendNum)
 	uint first = 0;
 	uint second = 0;
 
-	for (uint i = 0; i < _blendNum && i < BONE_MAX_NUM; i++)
+	for (uint i = 0; i < _blendNum && i < CH_BB_BONE_MAX_NUM; i++)
 	{
 		first = i / 4;
 		second = i % 4;

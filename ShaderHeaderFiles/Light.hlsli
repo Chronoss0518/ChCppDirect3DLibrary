@@ -5,16 +5,16 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef LIGHT_PLIGHTCOUNT
-#define LIGHT_PLIGHTCOUNT 10
+#ifndef CH_L_LIGHT_PLIGHTCOUNT
+#define CH_L_LIGHT_PLIGHTCOUNT 10
 #endif
 
-#ifndef LIGHT_DATA_REGISTERNO
-#define LIGHT_DATA_REGISTERNO 10
+#ifndef CH_LL_LIGHT_DATA_REGISTERNO
+#define CH_LL_LIGHT_DATA_REGISTERNO 10
 #endif
 
-#ifndef LIGHT_TEXTURE_REGISTERNO
-#define LIGHT_TEXTURE_REGISTERNO 10
+#ifndef CH_L_LIGHT_TEXTURE_REGISTERNO
+#define CH_L_LIGHT_TEXTURE_REGISTERNO 10
 #endif
 
 struct ChDirectionalLight
@@ -53,7 +53,7 @@ struct ChLightData
 
     ChDirectionalLight light;
 
-    ChPointLight pLight[LIGHT_PLIGHTCOUNT];
+    ChPointLight pLight[CH_L_LIGHT_PLIGHTCOUNT];
 };
 
 #ifdef __SHADER__
@@ -70,7 +70,7 @@ float3 GetLightColorBase(ChLightData _data, L_BaseColor _bCol);
 
 #ifndef _SM5_0_
 
-texutre lightPowMap :register(CHANGE_TBUFFER(LIGHT_TEXTURE_REGISTERNO));
+texutre lightPowMap :register(CH_CHANGE_TBUFFER(CH_L_LIGHT_TEXTURE_REGISTERNO));
 
 //画像から1ピクセルの色を取得するための物//
 sampler lightSmp = sampler_state {
@@ -95,10 +95,10 @@ float3 GetLightColor(ChLightData _data,L_BaseColor _bCol)
 
 #else
 
-texture2D lightPowMap :register(CHANGE_TBUFFER(LIGHT_TEXTURE_REGISTERNO));
+texture2D lightPowMap :register(CH_CHANGE_TBUFFER(CH_L_LIGHT_TEXTURE_REGISTERNO));
 
 //画像から1ピクセルの色を取得するための物//
-sampler lightSmp : register(CHANGE_SBUFFER(LIGHT_TEXTURE_REGISTERNO))
+sampler lightSmp : register(CH_CHANGE_SBUFFER(CH_L_LIGHT_TEXTURE_REGISTERNO))
 = sampler_state {
 	Filter = MIN_MAG_MIP_LINEAR;
 	AddressU = Clamp;
@@ -106,7 +106,7 @@ sampler lightSmp : register(CHANGE_SBUFFER(LIGHT_TEXTURE_REGISTERNO))
 	AddressW = Clamp;
 };
 
-cbuffer LightData :register(CHANGE_CBUFFER(LIGHT_DATA_REGISTERNO))
+cbuffer LightData :register(CH_CHANGE_CBUFFER(CH_LL_LIGHT_DATA_REGISTERNO))
 {
 	ChLightData lightData;
 };

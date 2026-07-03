@@ -25,22 +25,22 @@ struct ChMaterialDatas
 
 #ifdef _SM5_0_
 
-cbuffer DrawData :register(CHANGE_CBUFFER(CH_DP_DRAW_DATA_REGISTERNO))
+cbuffer DrawData :register(CH_CHANGE_CBUFFER(CH_DP_DRAW_DATA_REGISTERNO))
 {
 	ChDrawData drawData;
 };
 
-cbuffer ModelData :register(CHANGE_CBUFFER(CH_DP_MODEL_DATA_REGISTERNO))
+cbuffer ModelData :register(CH_CHANGE_CBUFFER(CH_DP_MODEL_DATA_REGISTERNO))
 {
 	ChModelData modelData;
 };
 
-cbuffer FrameData :register(CHANGE_CBUFFER(CH_DP_FRAME_DATA_REGISTERNO))
+cbuffer FrameData :register(CH_CHANGE_CBUFFER(CH_DP_FRAME_DATA_REGISTERNO))
 {
 	ChFrameDatas frameDatas;
 };
 
-cbuffer Material:register(CHANGE_CBUFFER(CH_DP_MATERIAL_DATA_REGISTERNO))
+cbuffer Material:register(CH_CHANGE_CBUFFER(CH_DP_MATERIAL_DATA_REGISTERNO))
 {
 	ChMaterialDatas mateDatas;
 };

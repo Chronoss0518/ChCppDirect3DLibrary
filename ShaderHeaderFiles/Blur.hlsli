@@ -7,8 +7,8 @@
 
 #include"Texture/BaseTexture.hlsli"
 
-#ifndef BLUR_DATA_REGISTERNO
-#define BLUR_DATA_REGISTERNO 1
+#ifndef CH_B_BLUR_DATA_REGISTERNO
+#define CH_B_BLUR_DATA_REGISTERNO 1
 #endif
 
 struct ChBlurData
@@ -44,7 +44,7 @@ float4 Blur(ChBlurData _data,float2 _uv)
 
 #else
 
-cbuffer BlurData : register(CHANGE_CBUFFER(BLUR_DATA_REGISTERNO))
+cbuffer BlurData : register(CH_CHANGE_CBUFFER(CH_B_BLUR_DATA_REGISTERNO))
 {
     ChBlurData blurData;
 };

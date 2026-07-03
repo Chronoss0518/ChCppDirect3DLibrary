@@ -7,8 +7,8 @@
 
 #include"Texture/BaseTexture.hlsli"
 
-#ifndef HIGHLIGHT_DATA_REGISTERNO
-#define HIGHLIGHT_DATA_REGISTERNO 1
+#ifndef CH_HL_HIGHLIGHT_DATA_REGISTERNO
+#define CH_HL_HIGHLIGHT_DATA_REGISTERNO 1
 #endif
 
 struct ChHighLightData
@@ -49,7 +49,7 @@ float4 HighLightColor(ChHighLightData _data,float2 _uv)
 
 #else
 
-cbuffer HighLightData : register(CHANGE_CBUFFER(HIGHLIGHT_DATA_REGISTERNO))
+cbuffer HighLightData : register(CH_CHANGE_CBUFFER(CH_HL_HIGHLIGHT_DATA_REGISTERNO))
 {
     ChHighLightData highLightData; 
 };

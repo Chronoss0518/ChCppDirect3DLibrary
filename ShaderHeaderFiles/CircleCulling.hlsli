@@ -5,8 +5,8 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef CIRCLE_CULLING_DATA
-#define CIRCLE_CULLING_DATA 6
+#ifndef CH_CC_CIRCLE_CULLING_DATA
+#define CH_CC_CIRCLE_CULLING_DATA 6
 #endif
 
 struct ChCircleCullingData
@@ -43,7 +43,7 @@ void CircleCullingTest(ChCircleCullingData _data,float2 _uv)
 
 #else
 
-cbuffer CircleCullingData :register(CHANGE_CBUFFER(CIRCLE_CULLING_DATA))
+cbuffer CircleCullingData :register(CH_CHANGE_CBUFFER(CH_CC_CIRCLE_CULLING_DATA))
 {
 	ChCircleCullingData circleCullingData;
 };

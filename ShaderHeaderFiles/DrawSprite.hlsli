@@ -5,8 +5,8 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef SPRITE_DATA_REGISTERNO
-#define SPRITE_DATA_REGISTERNO 0
+#ifndef CH_DS_SPRITE_DATA_REGISTERNO
+#define CH_DS_SPRITE_DATA_REGISTERNO 0
 #endif
 
 struct ChSpriteData
@@ -61,7 +61,7 @@ void AlphaTest(ChSpriteData _data,float _alpha)
 
 #else
 
-cbuffer SpriteData : register(CHANGE_CBUFFER(SPRITE_DATA_REGISTERNO))
+cbuffer SpriteData : register(CH_CHANGE_CBUFFER(CH_DS_SPRITE_DATA_REGISTERNO))
 {
 	ChSpriteData spriteData;
 };
