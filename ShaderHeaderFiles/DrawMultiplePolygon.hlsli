@@ -6,47 +6,41 @@
 #include"ShaderPublicInclude.hlsli"
 #include"DrawPolygonBase.hlsli"
 
-#ifndef DRAW_DATA_REGISTERNO
-#define DRAW_DATA_REGISTERNO 0
+#ifndef CH_DMP_MAX_FRAME_COUNT 
+#define CH_DMP_MAX_FRAME_COUNT 32
 #endif
 
-#ifndef CHARACTOR_DATA_REGISTERNO
-#define CHARACTOR_DATA_REGISTERNO 1
-#endif
-
-#ifndef MATERIAL_DATA_REGISTERNO 
-#define MATERIAL_DATA_REGISTERNO 2
-#endif
-
-#ifndef MAX_FRAME_COUNT 
-#define MAX_FRAME_COUNT 32
-#endif
-
-struct ChCharaDatas
+struct ChFrameDatas
 {
-    ChCharaData datas[MAX_FRAME_COUNT];
+    ChFrameData datas[CH_DMP_MAX_FRAME_COUNT];
+    int drawFlgs[CH_DMP_MAX_FRAME_COUNT];
 };
 
 struct ChMaterials
 {
-    ChMaterial datas[MAX_FRAME_COUNT];
+    ChMaterial datas[CH_DMP_MAX_FRAME_COUNT];
 };
 
 #ifdef __SHADER__
 
 #ifdef _SM5_0_
 
-cbuffer DrawData :register(CHANGE_CBUFFER(DRAW_DATA_REGISTERNO))
+cbuffer DrawData :register(CHANGE_CBUFFER(CH_DP_DRAW_DATA_REGISTERNO))
 {
 	ChDrawData drawData;
 };
 
-cbuffer CharaData :register(CHANGE_CBUFFER(CHARACTOR_DATA_REGISTERNO))
+cbuffer ModelData :register(CHANGE_CBUFFER(CH_DP_MODEL_DATA_REGISTERNO))
 {
-	ChCharaDatas charaDatas;
+	ChModelData modelData;
 };
 
-cbuffer Material:register(CHANGE_CBUFFER(MATERIAL_DATA_REGISTERNO))
+cbuffer FrameData :register(CHANGE_CBUFFER(CH_DP_FRAME_DATA_REGISTERNO))
+{
+	ChFrameDatas frameDatas;
+};
+
+cbuffer Material:register(CHANGE_CBUFFER(CH_DP_MATERIAL_DATA_REGISTERNO))
 {
 	ChMaterials mates;
 };
@@ -60,7 +54,7 @@ MTWStruct ModelToWorld(
 	int _no)
 {
 	if(_no >= MAX_FRAME_COUNT || _no < 0)_no = 0;
-	return ModelToWorldBase(drawData,charaDatas.datas[_no],_pos,_uv,_normal,_faceNormal,_frameMatrix);
+	return ModelToWorldBase(drawData,modelData,charaDatas.datas[_no],_pos,_uv,_normal,_faceNormal,_frameMatrix);
 }
 
 void AlphaTest(float _alpha)
