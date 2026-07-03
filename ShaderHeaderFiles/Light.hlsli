@@ -106,7 +106,7 @@ sampler lightSmp : register(CH_CHANGE_SBUFFER(CH_L_LIGHT_TEXTURE_REGISTERNO))
 	AddressW = Clamp;
 };
 
-cbuffer LightData :register(CH_CHANGE_CBUFFER(CH_LL_LIGHT_DATA_REGISTERNO))
+cbuffer LightData :register(CH_CHANGE_CBUFFER(CH_L_LIGHT_DATA_REGISTERNO))
 {
 	ChLightData lightData;
 };
