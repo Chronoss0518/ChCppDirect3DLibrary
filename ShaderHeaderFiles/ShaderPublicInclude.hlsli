@@ -15,28 +15,28 @@
 #endif
 #endif
 
-#ifndef CHANGE_BUFFER
+#ifndef CH_CHANGE_BUFFER
 #ifdef _SM6_0_
-#define CHANGE_BUFFER(_buffer,_no) _buffer[_no]
+#define CH_CHANGE_BUFFER(_buffer,_no) _buffer[_no]
 #else
-#define CHANGE_BUFFER(_buffer,_no) _buffer##_no
+#define CH_CHANGE_BUFFER(_buffer,_no) _buffer##_no
 #endif
 #endif
 
-#ifndef CHANGE_CBUFFER
+#ifndef CH_CHANGE_CBUFFER
 #ifndef _SM5_0_
-#define CHANGE_CBUFFER(_no) CHANGE_BUFFER(c,_no)
+#define CH_CHANGE_CBUFFER(_no) CH_CHANGE_BUFFER(c,_no)
 #else
-#define CHANGE_CBUFFER(_no) CHANGE_BUFFER(b,_no)
+#define CH_CHANGE_CBUFFER(_no) CH_CHANGE_BUFFER(b,_no)
 #endif
 #endif
 
-#ifndef CHANGE_TBUFFER
-#define CHANGE_TBUFFER(_no) CHANGE_BUFFER(t,_no)
+#ifndef CH_CHANGE_TBUFFER
+#define CH_CHANGE_TBUFFER(_no) CH_CHANGE_BUFFER(t,_no)
 #endif
 
-#ifndef CHANGE_SBUFFER
-#define CHANGE_SBUFFER(_no) CHANGE_BUFFER(s,_no)
+#ifndef CH_CHANGE_SBUFFER
+#define CH_CHANGE_SBUFFER(_no) CH_CHANGE_BUFFER(s,_no)
 #endif
 
 float4x4 GetInitMatrix4x4()
