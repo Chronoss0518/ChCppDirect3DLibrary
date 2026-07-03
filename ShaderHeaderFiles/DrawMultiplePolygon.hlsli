@@ -16,9 +16,9 @@ struct ChFrameDatas
     int drawFlgs[CH_DMP_MAX_FRAME_COUNT];
 };
 
-struct ChMaterials
+struct ChMaterialDatas
 {
-    ChMaterial datas[CH_DMP_MAX_FRAME_COUNT];
+    ChMaterialData datas[CH_DMP_MAX_FRAME_COUNT];
 };
 
 #ifdef __SHADER__
@@ -42,7 +42,7 @@ cbuffer FrameData :register(CHANGE_CBUFFER(CH_DP_FRAME_DATA_REGISTERNO))
 
 cbuffer Material:register(CHANGE_CBUFFER(CH_DP_MATERIAL_DATA_REGISTERNO))
 {
-	ChMaterials mates;
+	ChMaterialDatas mateDatas;
 };
 
 MTWStruct ModelToWorld(
@@ -53,8 +53,17 @@ MTWStruct ModelToWorld(
 	float4x4 _frameMatrix,
 	int _no)
 {
-	if(_no >= MAX_FRAME_COUNT || _no < 0)_no = 0;
-	return ModelToWorldBase(drawData,modelData,charaDatas.datas[_no],_pos,_uv,_normal,_faceNormal,_frameMatrix);
+	if(_no >= CH_DMP_MAX_FRAME_COUNT || _no < 0)_no = 0;
+	return ModelToWorldBase(
+		drawData,
+		modelData,
+		frameDatas.datas[_no],
+		mateDatas.datas[_no],
+		_pos,
+		_uv,
+		_normal,
+		_faceNormal,
+		_frameMatrix);
 }
 
 void AlphaTest(float _alpha)
