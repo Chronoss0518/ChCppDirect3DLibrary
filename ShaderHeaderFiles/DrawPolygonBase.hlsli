@@ -35,7 +35,7 @@ struct ChFrameData
     row_major float4x4 frameMatrix;
 };
 
-struct ChMaterial
+struct ChMaterialData
 {
 	//diffuse//
     float4 dif;
@@ -79,6 +79,7 @@ MTWStruct ModelToWorldBase(
 	ChDrawData _drawData,
 	ChModelData _modelData,
 	ChFrameData _frameData,
+	ChMaterialData _mateData,
 	float4 _pos,
 	float2 _uv,
 	float3 _normal,
@@ -95,7 +96,7 @@ MTWStruct ModelToWorldBase(
 
 	res.proPos = mul(res.viewPos, _drawData.proMat);
 
-	res.uv = _uv + _frameData.moveUV;
+	res.uv = _uv + _mateData.moveUV;
 
 	res.vertexNormal = normalize(mul(_normal, (float3x3)tmpMat));
 	res.faceNormal = normalize(mul(_faceNormal, (float3x3)tmpMat));
