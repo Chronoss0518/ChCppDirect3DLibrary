@@ -7,7 +7,7 @@
 #include"DrawPolygonBase.hlsli"
 
 #ifndef CH_DMP_MAX_FRAME_COUNT 
-#define CH_DMP_MAX_FRAME_COUNT 32
+#define CH_DMP_MAX_FRAME_COUNT 64
 #endif
 
 struct ChFrameDatas
