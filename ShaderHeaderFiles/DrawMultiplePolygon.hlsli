@@ -7,7 +7,7 @@
 #include"DrawPolygonBase.hlsli"
 
 #ifndef CH_DMP_MAX_FRAME_COUNT 
-#define CH_DMP_MAX_FRAME_COUNT 64
+#define CH_DMP_MAX_FRAME_COUNT 128
 #endif
 
 struct ChFrameDatas
@@ -69,6 +69,50 @@ MTWStruct ModelToWorld(
 void AlphaTest(float _alpha)
 {
 	AlphaTestBase(drawData,_alpha);
+}
+
+bool IsDrawFlags(uint _num)
+{
+	return frameDatas.drawFlgs[_num] != 0;
+}
+
+float GetMod(float _val,float _min,float _max)
+{
+	if(_max <= _min)return _val;
+
+	float res = _val;
+	
+	float size = _max - _min;
+
+	while(res > _max)
+	{
+		res -= size;
+	}
+
+	while(res < _min)
+	{
+		res += size;
+	}
+
+	return res;
+}
+
+float2 GetUV(float2 _uv,uint _no)
+{	
+	if(_no >= CH_DMP_MAX_FRAME_COUNT)_no = 0;
+	float paddingBase = _no/(float)CH_DMP_MAX_FRAME_COUNT;
+	float paddingMax = (_no + 1)/(float)CH_DMP_MAX_FRAME_COUNT;
+	float paddingSize = 1.0f/CH_DMP_MAX_FRAME_COUNT;
+
+	
+	float2 res = _uv;
+	res.y = GetMod(res.y,0.0f,1.0f);
+	res.x = GetMod(res.x,0.0f,1.0f);
+	
+	//res.y = min(max(paddingBase + paddingSize * res.y,paddingMax),paddingBase);
+	res.x= min(max(paddingBase + paddingSize * res.x,paddingMax),paddingBase);
+
+	return res;
 }
 
 #endif
