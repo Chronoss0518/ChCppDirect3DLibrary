@@ -5,33 +5,66 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef CIRCLE_CULLING_DATA
-#define CIRCLE_CULLING_DATA 6
+#ifndef CH_CC_CIRCLE_CULLING_DATA_REGISTERNO
+#define CH_CC_CIRCLE_CULLING_DATA_REGISTERNO 6
 #endif
 
-#ifdef __SHADER__
-cbuffer ChCircleCullingData :register(CHANGE_CBUFFER(CIRCLE_CULLING_DATA))
-#else
 struct ChCircleCullingData
-#endif
 {
-	float2 drawStartDir = float2(0.0f, 1.0f);
-	float2 centerPos = float2(0.0f, 0.0f);
-	float drawValue = 1.0f;//-1～1のサイズの数値(負の値だった場合は反時計回りになる)//
-	float3 nonData;//バイト合わせ//
+    float2 drawStartDir
+#ifdef __cplusplus
+	= float2(0.0f, 1.0f)
+#endif
+	;
+    float2 centerPos
+#ifdef __cplusplus
+	= float2(0.0f, 0.0f)
+#endif
+	;
+    float drawValue //-1～1のサイズの数値(負の値だった場合は反時計回りになる)//
+#ifdef __cplusplus
+	= 1.0f
+#endif
+	;
+    float3 nonData; //バイト合わせ//
 };
 
 #ifdef __SHADER__
 
-float maxValue = 1.0f;
+void CircleCullingTestBase(ChCircleCullingData _data,float2 _uv);
+
+#ifndef _SM5_0_
+
+//このメソッドの内部でclipを行っており、成功するとdiscardされずに描画される//
+void CircleCullingTest(ChCircleCullingData _data,float2 _uv)
+{
+	CircleCullingTestBase(_data,_uv);
+}
+
+#else
+
+cbuffer CircleCullingData :register(CH_CHANGE_CBUFFER(CH_CC_CIRCLE_CULLING_DATA_REGISTERNO))
+{
+	ChCircleCullingData circleCullingData;
+};
 
 //このメソッドの内部でclipを行っており、成功するとdiscardされずに描画される//
 void CircleCullingTest(float2 _uv)
 {
-	float3 useDrawStartDir = float3(drawStartDir.x, 0.0f, drawStartDir.y);
+	CircleCullingTestBase(circleCullingData,_uv);
+}
+
+#endif
+
+//このメソッドの内部でclipを行っており、成功するとdiscardされずに描画される//
+void CircleCullingTestBase(ChCircleCullingData _data,float2 _uv)
+{
+	const float MAX_VALUE = 1.0f;
+	
+	float3 useDrawStartDir = float3(_data.drawStartDir.x, 0.0f, _data.drawStartDir.y);
 	useDrawStartDir = normalize(useDrawStartDir);
 
-	float3 useUVPos = float3(_uv.x - centerPos.x, 0.0f, _uv.y - centerPos.y);
+	float3 useUVPos = float3(_uv.x - _data.centerPos.x, 0.0f, _uv.y - _data.centerPos.y);
 
 	useUVPos.xz = useUVPos.xz * 2.0f - 1.0f;
 
@@ -45,9 +78,9 @@ void CircleCullingTest(float2 _uv)
 
 	uvPosRadian = uvNormalDir.y > 0 ? (uvPosRadian - 1.0f) * -0.25f : (uvPosRadian + 1.0f) * 0.25f + 0.5f;
 
-	float useDrawValue = drawValue * maxValue;
+	float useDrawValue = _data.drawValue * MAX_VALUE;
 	
-	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (maxValue + useDrawValue));
+	clip(useDrawValue > 0 ? useDrawValue - uvPosRadian : (uvPosRadian) - (MAX_VALUE + useDrawValue));
 }
 
 #endif

@@ -5,16 +5,16 @@
 
 #include"../ShaderPublicInclude.hlsli"
 
-#ifndef GRAY_SCALE_DATA_REGISTERNO
-#define GRAY_SCALE_DATA_REGISTERNO 2
+#ifndef CH_GS_GRAY_SCALE_DATA_REGISTERNO
+#define CH_GS_GRAY_SCALE_DATA_REGISTERNO 2
 #endif
 
-#ifndef GRAY_SCALE_TEXTURE_REGISTER
-#define	GRAY_SCALE_TEXTURE_REGISTER 2
+#ifndef CH_GS_GRAY_SCALE_TEXTURE_REGISTER
+#define	CH_GS_GRAY_SCALE_TEXTURE_REGISTER 2
 #endif
 
 #ifdef __SHADER__
-cbuffer GrayScaleData : register(CHANGE_CBUFFER(GRAY_SCALE_DATA_REGISTERNO))
+cbuffer GrayScaleData : register(CH_CHANGE_CBUFFER(CH_GS_GRAY_SCALE_DATA_REGISTERNO))
 #else
 struct ChS_GrayScale
 #endif
@@ -24,9 +24,9 @@ struct ChS_GrayScale
 
 
 #ifdef __SHADER__
-texture2D grayScaleTex : register(CHANGE_TBUFFER(GRAY_SCALE_TEXTURE_REGISTER));
+texture2D grayScaleTex : register(CH_CHANGE_TBUFFER(CH_GS_GRAY_SCALE_TEXTURE_REGISTER));
 
-sampler grayScaleSmp :register(CHANGE_SBUFFER(GRAY_SCALE_TEXTURE_REGISTER));
+sampler grayScaleSmp :register(CH_CHANGE_SBUFFER(CH_GS_GRAY_SCALE_TEXTURE_REGISTER));
 #endif
 
 #endif

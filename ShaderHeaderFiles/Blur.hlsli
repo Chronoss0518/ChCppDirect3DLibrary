@@ -7,33 +7,65 @@
 
 #include"Texture/BaseTexture.hlsli"
 
-#ifndef BLUR_DATA_REGISTERNO
-#define BLUR_DATA_REGISTERNO 1
+#ifndef CH_B_BLUR_DATA_REGISTERNO
+#define CH_B_BLUR_DATA_REGISTERNO 1
 #endif
 
-#ifdef __SHADER__
-cbuffer BlurData : register(CHANGE_CBUFFER(BLUR_DATA_REGISTERNO))
-#else
-struct ChS_Blur
-#endif
+struct ChBlurData
 {
-    float2 windowSize = float2(0.0f, 0.0f);
-    int blurPower = 5;
-    int liteBlurFlg = 0;
+    float2 windowSize
+#ifdef __cplusplus
+	= float2(0.0f, 0.0f)
+#endif
+    ;
+    int blurPower
+#ifdef __cplusplus
+	= 5
+#endif
+    ;
+    int liteBlurFlg
+#ifdef __cplusplus
+	= 0
+#endif
+    ;
 };
 
+
 #ifdef __SHADER__
+
+float4 BlurBase(ChBlurData _data,float2 _uv);
+
+#ifndef _SM5_0_
+
+float4 Blur(ChBlurData _data,float2 _uv)
+{
+    return BlurBase(_data,_uv);
+}
+
+#else
+
+cbuffer BlurData : register(CH_CHANGE_CBUFFER(CH_B_BLUR_DATA_REGISTERNO))
+{
+    ChBlurData blurData;
+};
 
 float4 Blur(float2 _uv)
 {
+    return BlurBase(blurData,_uv);
+}
+
+#endif
+
+float4 BlurBase(ChBlurData _data,float2 _uv)
+{
     float4 resultColor = GetBaseTextureColor(_uv);
-    float baseWidth = windowSize.x > 0.0f ? 1.0f / windowSize.x : 1.0f;
-    float baseHeight = windowSize.y > 0.0f ? 1.0f / windowSize.y : 1.0f;
+    float baseWidth = _data.windowSize.x > 0.0f ? 1.0f / _data.windowSize.x : 1.0f;
+    float baseHeight = _data.windowSize.y > 0.0f ? 1.0f / _data.windowSize.y : 1.0f;
     
-    bool liteFlg = liteBlurFlg == 1;
+    bool liteFlg = _data.liteBlurFlg == 1;
     int mulCount = liteFlg ? 2 : 4;
 
-    for (int i = 1; i < blurPower;i++)
+    for (int i = 1; i < _data.blurPower;i++)
     {
         resultColor += GetBaseTextureColor(float2(_uv.x + (baseWidth * i), _uv.y));
         resultColor += GetBaseTextureColor(float2(_uv.x, _uv.y + (baseHeight * i)));
@@ -41,7 +73,7 @@ float4 Blur(float2 _uv)
         resultColor += GetBaseTextureColor(float2(_uv.x + (baseWidth * -i), _uv.y));
         resultColor += GetBaseTextureColor(float2(_uv.x, _uv.y + (baseHeight * -i)));
     }
-    resultColor /= float((blurPower * mulCount) + 1);
+    resultColor /= float((_data.blurPower * mulCount) + 1);
     
     return resultColor;
 }

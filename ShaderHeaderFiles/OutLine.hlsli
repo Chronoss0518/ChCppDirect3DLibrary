@@ -3,12 +3,12 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef OUTLINE_DATA_REGISTERNO
-#define OUTLINE_DATA_REGISTERNO 12
+#ifndef CH_OL_OUTLINE_DATA_REGISTERNO
+#define CH_OL_OUTLINE_DATA_REGISTERNO 12
 #endif
 
 #ifdef __SHADER__
-cbuffer OutLineData :register(CHANGE_CBUFFER(OUTLINE_DATA_REGISTERNO))
+cbuffer OutLineData :register(CH_CHANGE_CBUFFER(CH_OL_OUTLINE_DATA_REGISTERNO))
 #else
 struct ChOutLineData
 #endif

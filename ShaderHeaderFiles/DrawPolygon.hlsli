@@ -4,88 +4,51 @@
 //#define __SHADER__をhlsl側で定義する//
 
 #include"ShaderPublicInclude.hlsli"
-
-#ifndef DRAW_DATA_REGISTERNO
-#define DRAW_DATA_REGISTERNO 0
-#endif
-
-#ifndef CHARACTOR_DATA_REGISTERNO
-#define CHARACTOR_DATA_REGISTERNO 1
-#endif
-
-#ifndef CHARACTOR_DATA_ARRAY_COUNT
-#define CHARACTOR_DATA_ARRAY_COUNT 32
-#endif
-
-#ifndef MATERIAL_DATA_REGISTERNO 
-#define MATERIAL_DATA_REGISTERNO 2
-#endif
-
-#ifndef NORMAL_TEXTURE_REGISTER
-#define	NORMAL_TEXTURE_REGISTER 1
-#endif
-
-struct ChP_DrawData
-{
-	row_major float4x4 viewMat;
-
-	row_major float4x4 proMat;
-};
-
-struct ChP_CharaData
-{
-	row_major float4x4 worldMat;
-
-	row_major float4x4 frameMatrix;
-	
-    float2 moveUV;
-	
-    float alphaTestValue;
-	
-    float charaDataTmp;
-};
-
-struct ChP_Material
-{
-	//diffuse//
-    float4 dif;
-	//specular//
-    float3 speCol;
-    float spePow;
-	//ambient//
-    float4 ambient;
-};
+#include"DrawPolygonBase.hlsli"
 
 #ifdef __SHADER__
 
-cbuffer DrawData :register(CHANGE_CBUFFER(DRAW_DATA_REGISTERNO))
+#ifndef _SM5_0_
+
+MTWStruct ModelToWorld(
+	ChDrawData _drawData,
+	ChModelData _modelData,
+	ChFrameData _frameData,
+	ChMaterialData _mateData,
+	float4 _pos,
+	float2 _uv,
+	float3 _normal,
+	float3 _faceNormal,
+	float4x4 _frameMatrix)
 {
-	ChP_DrawData drawData;
+	return ModelToWorldBase(_drawData,_modelData,_frameData,_mateData,_pos,_uv,_normal,_faceNormal,_frameMatrix);
+}
+
+void AlphaTest(ChDrawData _data,float _alpha)
+{
+	AlphaTestBase(_data,_alpha);
+}
+
+#else
+
+cbuffer DrawData :register(CH_CHANGE_CBUFFER(CH_DP_DRAW_DATA_REGISTERNO))
+{
+	ChDrawData drawData;
 };
 
-cbuffer CharaData :register(CHANGE_CBUFFER(CHARACTOR_DATA_REGISTERNO))
+cbuffer ModelData :register(CH_CHANGE_CBUFFER(CH_DP_MODEL_DATA_REGISTERNO))
 {
-	ChP_CharaData charaDatas;
+	ChModelData modelData;
 };
 
-cbuffer Material:register(CHANGE_CBUFFER(MATERIAL_DATA_REGISTERNO))
+cbuffer FrameData :register(CH_CHANGE_CBUFFER(CH_DP_FRAME_DATA_REGISTERNO))
 {
-	uniform ChP_Material mate;
+	ChFrameData frameData;
 };
 
-texture2D normalTex :register(CHANGE_TBUFFER(NORMAL_TEXTURE_REGISTER));
-//画像から1ピクセルの色を取得するための物//
-sampler normalSmp :register(CHANGE_SBUFFER(NORMAL_TEXTURE_REGISTER));
-
-//ModelToWorld Structure//
-struct MTWStruct
+cbuffer MaterialData:register(CH_CHANGE_CBUFFER(CH_DP_MATERIAL_DATA_REGISTERNO))
 {
-	float3 vertexNormal;
-	float3 faceNormal;
-	float4 worldPos;
-	float4 viewPos;
-	float4 proPos;
-	float2 uv;
+	ChMaterialData mateData;
 };
 
 MTWStruct ModelToWorld(
@@ -95,42 +58,15 @@ MTWStruct ModelToWorld(
 	float3 _faceNormal,
 	float4x4 _frameMatrix)
 {
-	MTWStruct res;
-
-	float4x4 tmpMat = mul(_frameMatrix, charaDatas.worldMat);
-
-	res.worldPos = mul(_pos, tmpMat);
-
-	res.viewPos = mul(res.worldPos, drawData.viewMat);
-
-	res.proPos = mul(res.viewPos, drawData.proMat);
-
-	res.uv = _uv + charaDatas.moveUV;
-
-	res.vertexNormal = normalize(mul(_normal, (float3x3)tmpMat));
-	res.faceNormal = normalize(mul(_faceNormal, (float3x3)tmpMat));
-
-	return res;
-}
-
-void FrustumCulling(float4 _pos)
-{
-	float x = _pos.x / _pos.w;
-	x *= x;
-	float y = _pos.y / _pos.w;
-	y *= y;
-	float z = (_pos.z / _pos.w) * 2.0f - 1.0f;
-	z *= z;
-	clip(1.0f - x);
-	clip(1.0f - y);
-	clip(1.0f - z);
+	return ModelToWorldBase(drawData,modelData,frameData,mateData,_pos,_uv,_normal,_faceNormal,_frameMatrix);
 }
 
 void AlphaTest(float _alpha)
 {
-	clip(_alpha - charaDatas.alphaTestValue);
+	AlphaTestBase(drawData,_alpha);
 }
 
+#endif
 
 #endif
 

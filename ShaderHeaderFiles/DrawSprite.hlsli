@@ -5,21 +5,30 @@
 
 #include"ShaderPublicInclude.hlsli"
 
-#ifndef SPRITE_DATA_REGISTERNO
-#define SPRITE_DATA_REGISTERNO 0
+#ifndef CH_DS_SPRITE_DATA_REGISTERNO
+#define CH_DS_SPRITE_DATA_REGISTERNO 0
 #endif
 
-#ifdef __SHADER__
-cbuffer SpriteData : register(CHANGE_CBUFFER(SPRITE_DATA_REGISTERNO))
-#else
-struct ChS_SpriteData
-#endif
+struct ChSpriteData
 {
     row_major float4x4 spriteMat;
-    float4 baseColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    float2 moveUV = float2(0.0f, 0.0f);
-    float alphaTestValue = 0.1f;
-    float spriteDataTmp; //パッキング規則のためのバッファ//
+	
+    float4 baseColor
+#ifdef __cplusplus
+	= float4(1.0f, 1.0f, 1.0f, 1.0f)
+#endif
+	;
+    float2 moveUV
+#ifdef __cplusplus
+	= float2(0.0f, 0.0f)
+#endif
+	;
+    float alphaTestValue
+#ifdef __cplusplus
+	= 0.1f
+#endif
+	;
+    float nonData; //パッキング規則のためのバッファ//
 };
 
 #ifdef __SHADER__
@@ -30,7 +39,49 @@ struct MTWStruct
 	float2 uv;
 };
 
+MTWStruct ModelToWorldBase(
+	ChSpriteData _data,
+	float4 _pos,
+	float2 _uv);
+
+#ifndef _SM5_0_
+
 MTWStruct ModelToWorld(
+	ChSpriteData _data,
+	float4 _pos,
+	float2 _uv)
+{
+	return ModelToWorldBase(_data,_pos,_uv);
+}
+
+void AlphaTest(ChSpriteData _data,float _alpha)
+{
+	clip(_alpha - _data.alphaTestValue);
+}
+
+#else
+
+cbuffer SpriteData : register(CH_CHANGE_CBUFFER(CH_DS_SPRITE_DATA_REGISTERNO))
+{
+	ChSpriteData spriteData;
+};
+
+MTWStruct ModelToWorld(
+	float4 _pos,
+	float2 _uv)
+{
+	return ModelToWorldBase(spriteData,_pos,_uv);
+}
+
+void AlphaTest(float _alpha)
+{
+	clip(_alpha - spriteData.alphaTestValue);
+}
+
+#endif
+
+MTWStruct ModelToWorldBase(
+	ChSpriteData _data,
 	float4 _pos,
 	float2 _uv)
 {
@@ -38,17 +89,12 @@ MTWStruct ModelToWorld(
 
 	res.pos = _pos;
 
-	res.pos = mul(res.pos, spriteMat);
+	res.pos = mul(res.pos, _data.spriteMat);
 
 	//テクスチャマップ上の位置情報//
-	res.uv = _uv + moveUV;
+	res.uv = _uv + _data.moveUV;
 
 	return res;
-}
-
-void AlphaTest(float _alpha)
-{
-	clip(_alpha - alphaTestValue);
 }
 
 #endif
